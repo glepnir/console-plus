@@ -1,0 +1,51 @@
+{{ define "main" }}
+
+<div class="left">
+  <img src="{{.Site.Params.avatar}}" class="avatar">
+</div>
+
+<div class="right">
+  <div class="subtitle">
+    {{ .Site.Params.subtitle }}  <a href="about/">(more)</a>
+  </div>
+  <div class="language">
+    {{range .Site.Params.lang}}
+      <img class="lang-img" src="{{.badge}}"/>
+    {{- end -}}
+  </div>
+
+  <div class="social">
+      {{ range .Site.Params.social}}
+        {{if (eq .name "email")}}
+          <a href="mailto:{{ .url }}"  target="_blank" title="{{ .name | humanize }}">
+        {{ else }}
+          <a href="{{ .url }}" target="_blank" title="{{ .name | humanize }}">
+        {{ end }}
+          <img src="{{ .img }}" class="social-img" />
+        </a>
+      {{- end -}}
+  </div>
+</div>
+
+<br/>
+
+<div style="margin-top:15%">
+  <h1>Latest posts</h1>
+<div>
+
+<div class="posts-list">
+{{ with .Site.GetPage "/posts" }}
+    {{ range first 5 (sort .Data.Pages "Date" "desc" (where .Pages ".Params.private" "!=" true))}}
+        <div class="post">
+            <p>
+                <div class="date">{{ .PublishDate.Format "Jan. 2, 2006" }}</div>
+                <h1><a href="{{ .Permalink }}" title="{{ .Title }}">{{ .Title }}</a></h1>
+                {{ .Summary }}
+            </p>
+        </div>
+    {{ end }}
+{{ end }}
+</div>
+
+
+{{ end }}
